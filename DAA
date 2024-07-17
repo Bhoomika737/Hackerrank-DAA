@@ -1,0 +1,195 @@
+#1UNBOUNDED KNAPSACK
+import math
+import os
+import random
+import re
+import sys
+
+#
+# Complete the 'unboundedKnapsack' function below.
+#
+# The function is expected to return an INTEGER.
+# The function accepts following parameters:
+#  1. INTEGER k
+#  2. INTEGER_ARRAY arr
+#
+
+def unboundedKnapsack(k, arr):
+    dp = [0] * (k + 1)  # Initialize dp array with size k + 1
+    
+    for i in range(1, k + 1):
+        for num in arr:
+            if num <= i:
+                dp[i] = max(dp[i], dp[i - num] + num)
+    
+    return dp[k]
+
+if __name__ == '__main__':
+    input = sys.stdin.read
+    data = input().splitlines()
+    
+    t = int(data[0])  # Number of test cases
+    
+    index = 1
+    results = []
+    for _ in range(t):
+        n, k = map(int, data[index].split())
+        arr = list(map(int, data[index + 1].split()))
+        index += 2
+        
+        result = unboundedKnapsack(k, arr)
+        results.append(result)
+    
+    for result in results:
+        print(result)
+
+#2 CLOUDY DAY
+import math
+import os
+import random
+import re
+import sys
+
+#
+# Complete the 'maximumPeople' function below.
+#
+# The function is expected to return a LONG_INTEGER.
+# The function accepts following parameters:
+#  1. LONG_INTEGER_ARRAY p
+#  2. LONG_INTEGER_ARRAY x
+#  3. LONG_INTEGER m
+#  4. LONG_INTEGER_ARRAY c
+#  5. LONG_INTEGER_ARRAY r
+#
+
+def maximumPeople(p, x, m, c, r):
+    n = len(p)
+    events = []
+    
+    for i in range(m):
+        events.append((c[i] - r[i], 'start', i))
+        events.append((c[i] + r[i] + 1, 'end', i))
+    
+    for i in range(n):
+        events.append((x[i], 'town', i))
+    
+    events.sort()
+    
+    active_clouds = set()
+    cloud_population = [0] * m
+    town_sunny_population = [0] * n
+    total_sunny = 0
+    
+    for event in events:
+        position, event_type, index = event
+        if event_type == 'start':
+            active_clouds.add(index)
+        elif event_type == 'end':
+            active_clouds.remove(index)
+        elif event_type == 'town':
+            if len(active_clouds) == 0:
+                total_sunny += p[index]
+            elif len(active_clouds) == 1:
+                cloud_population[list(active_clouds)[0]] += p[index]
+    
+    max_sunny_with_one_removed = total_sunny + max(cloud_population, default=0)
+    return max_sunny_with_one_removed
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    n = int(input().strip())
+    p = list(map(int, input().strip().split()))
+    x = list(map(int, input().strip().split()))
+    m = int(input().strip())
+    c = list(map(int, input().strip().split()))
+    r = list(map(int, input().strip().split()))
+
+    result = maximumPeople(p, x, m, c, r)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
+
+#3 QUICKSORT
+import math
+import os
+import random
+import re
+import sys
+
+#
+# Complete the 'quickSort' function below.
+#
+# The function is expected to return an INTEGER_ARRAY.
+# The function accepts INTEGER_ARRAY arr as parameter.
+
+def partition(array, low, high):
+    piv = array[high]
+    i = low - 1
+
+    for j in range(low, high):
+        if array[j] <= piv:
+            i += 1
+            array[i], array[j] = array[j], array[i]
+
+    array[i + 1], array[high] = array[high], array[i + 1]
+
+    return i + 1
+
+def quicksort(array, low=0, high=None):
+    if high is None:
+        high = len(array) - 1
+
+    if low < high:
+        pivot_index = partition(array, low, high)
+        quicksort(array, low, pivot_index - 1)
+        quicksort(array, pivot_index + 1, high)
+
+    return array
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    n = int(input().strip())
+
+    arr = list(map(int, input().rstrip().split()))
+
+    result = quicksort(arr,low=0,high=None)
+
+    fptr.write(' '.join(map(str, result)))
+    fptr.write('\n')
+
+    fptr.close()
+
+#4 STRING CONSTRUCTION
+import math
+import os
+import random
+import re
+import sys
+
+#
+# Complete the 'stringConstruction' function below.
+#
+# The function is expected to return an INTEGER.
+# The function accepts STRING s as parameter.
+#
+
+def stringConstruction(s):
+    return len(set(s))
+    
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    q = int(input().strip())
+
+    for q_itr in range(q):
+        s = input()
+
+        result = stringConstruction(s)
+
+        fptr.write(str(result) + '\n')
+
+    fptr.close()
+
